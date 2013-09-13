@@ -1,0 +1,66 @@
+<!doctype html>
+<html class="no-js" lang="ja">
+<head>
+<meta charset="utf-8">
+<title></title>
+<meta name="viewport" content="width=device-width">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="jquery.jsonp-2.4.0.js"></script>
+</head>
+<body>
+<script>
+
+var getApiData = function(categoryId) {
+
+	var d = $.Deferred();
+
+	// $.ajax({
+	// 	type: 'get',
+	// 	url: 'service/api.php',
+	// 	dataType: 'json',
+	// 	data: {
+	// 		callback: 'hoge',
+	// 		prop1: 'prop1val'
+	// 	}
+	// }).then(function(data) {
+	// 	d.resolve(data);
+	// }, function() {
+	// 	d.reject();
+	// });
+
+	$.jsonp({
+		url: "service/api.php?callback=?",
+		callback: 'hoge',
+		data: {
+			prop1: 'prop1val'
+		},
+		complete: function(jsonpDefer) {
+			jsonpDefer.done(function(res) {
+				d.resolve(res);
+			});
+		},
+		error: function() {
+			d.resolve(arguments);
+		}
+	});
+
+	return d;
+
+};
+
+$(function() {
+	$('#run-test1').click(function() {
+		getApiData().done(function(res) {
+			console.log(res);
+		});
+	});
+});
+
+</script>
+
+<h1>API test</h1>
+
+<button id="run-test1">GO</button>
+
+</body>
+</html>
